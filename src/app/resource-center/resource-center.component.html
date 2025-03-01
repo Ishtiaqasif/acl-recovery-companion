@@ -1,1 +1,131 @@
-<p>resource-center works!</p>
+<div class="resource-container">
+  <!-- Featured Resources -->
+  <section *ngIf="featuredResources.length > 0" class="featured-resources">
+    <h2>Featured Resources</h2>
+    <div class="resources-grid">
+      <div *ngFor="let resource of featuredResources" class="resource-card featured">
+        <div class="resource-header">
+          <span class="badge content-type">{{ getContentTypeLabel(resource.contentType) }}</span>
+          <span class="badge phase">{{ getPhaseLabel(resource.recoveryPhase) }}</span>
+        </div>
+        <h3>{{ resource.title }}</h3>
+        <p>{{ resource.description }}</p>
+        <div class="resource-footer">
+          <a [routerLink]="['/resource', resource.id]" class="view-btn">View Resource</a>
+          <span class="views">{{ resource.viewCount }} views</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search and Filters -->
+  <section class="resource-filters">
+    <h2>Resource Library</h2>
+    
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery" 
+        placeholder="Search resources..."
+        (keyup.enter)="applyFilters()">
+      <button (click)="applyFilters()" class="search-btn">Search</button>
+    </div>
+    
+    <div class="filters">
+      <div class="filter-group">
+        <label>Content Type:</label>
+        <select [(ngModel)]="filters.contentType" (change)="applyFilters()">
+          <option [value]="undefined">All Types</option>
+          <option *ngFor="let type of contentTypes" [value]="type.value">{{ type.label }}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Recovery Phase:</label>
+        <select [(ngModel)]="filters.recoveryPhase" (change)="applyFilters()">
+          <option [value]="undefined">All Phases</option>
+          <option *ngFor="let phase of recoveryPhases" [value]="phase.value">{{ phase.label }}</option>
+        </select>
+      </div>
+      
+      <button (click)="clearFilters()" class="clear-btn">Clear Filters</button>
+    </div>
+  </section>
+  
+  <!-- Main Resource List -->
+  <section class="resources-list">
+    <div *ngIf="isLoading" class="loading">
+      <p>Loading resources...</p>
+    </div>
+    
+    <div *ngIf="!isLoading && error" class="error">
+      <p>{{ error }}</p>
+    </div>
+    
+    <div *ngIf="!isLoading && !error && resources.length === 0" class="no-results">
+      <p>No resources found matching your criteria.</p>
+    </div>
+    
+    <div *ngIf="!isLoading && !error && resources.length > 0" class="resources-grid">
+      <div *ngFor="let resource of resources" class="resource-card">
+        <div class="resource-header">
+          <span class="badge content-type">{{ getContentTypeLabel(resource.contentType) }}</span>
+          <span class="badge phase">{{ getPhaseLabel(resource.recoveryPhase) }}</span>
+        </div>
+        <h3>{{ resource.title }}</h3>
+        <p>{{ resource.description }}</p>
+        <div class="resource-footer">
+          <a [routerLink]="['/resource', resource.id]" class="view-btn">View Resource</a>
+          <span class="views">{{ resource.viewCount }} views</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pagination -->
+    <div *ngIf="!isLoading && !error && totalPages > 1" class="pagination">
+      <button 
+        [disabled]="filters.page === 1" 
+        (click)="goToPage(filters.page! - 1)"
+        class="page-btn">
+        Previous
+      </button>
+      
+      <span class="page-info">Page {{ filters.page }} of {{ totalPages }}</span>
+      
+      <button 
+        [disabled]="filters.page === totalPages" 
+        (click)="goToPage(filters.page! + 1)"
+        class="page-btn">
+        Next
+      </button>
+    </div>
+  </section>
+  
+  <!-- Resources by Phase - Rendered with tabs or sections -->
+  <section *ngIf="hasPhaseResources()" class="resources-by-phase">
+    <h2>Resources by Recovery Phase</h2>
+    
+    <div class="phase-tabs">
+      <button 
+        *ngFor="let phase of recoveryPhases" 
+        [class.active]="filters.recoveryPhase === phase.value"
+        (click)="filters.recoveryPhase = phase.value; applyFilters()"
+        class="tab-btn">
+        {{ phase.label }}
+      </button>
+    </div>
+    
+    <div *ngFor="let phase of recoveryPhases.slice(1)" class="phase-section">
+      <div *ngIf="phaseResources[phase.value] && phaseResources[phase.value].length > 0">
+        <h3>{{ phase.label }}</h3>
+        <div class="resources-grid small">
+          <div *ngFor="let resource of phaseResources[phase.value].slice(0,3)" class="resource-card small">
+            <h4>{{ resource.title }}</h4>
+            <p class="truncate">{{ resource.description }}</p>
+            <a [routerLink]="['/resource', resource.id]" class="view-btn small">View</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
