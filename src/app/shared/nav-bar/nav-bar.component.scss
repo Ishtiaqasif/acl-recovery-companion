@@ -1,0 +1,219 @@
+:host {
+  --primary: #0277bd;
+  --primary-light: #58a5f0;
+  --primary-dark: #004c8c;
+  --secondary: #26a69a;
+  --secondary-light: #64d8cb;
+  --secondary-dark: #00766c;
+  --text-on-primary: #ffffff;
+  --text-on-secondary: #ffffff;
+  --background: #f5f5f5;
+  --surface: #ffffff;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  
+  /* Z-index levels */
+  --z-navbar: 100;
+  --z-mobile-menu: 200;
+  --z-overlay: 150;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary);
+  color: var(--text-on-primary);
+  padding: 0 2rem;
+  height: 64px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: var(--z-navbar);
+}
+
+.navbar-logo a {
+  color: var(--text-on-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar-links a {
+  color: var(--text-on-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.navbar-links a:hover {
+  color: var(--secondary-light);
+}
+
+.navbar-links a.active {
+  color: var(--secondary-light);
+}
+
+.navbar-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--secondary);
+  border-radius: 3px 3px 0 0;
+}
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.burger-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  transition: transform 0.3s;
+}
+
+.burger-icon .bar {
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-on-primary);
+  transition: all 0.3s;
+}
+
+.burger-icon.open {
+  transform: rotate(90deg);
+}
+
+.burger-icon.open .bar:first-child {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger-icon.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-icon.open .bar:last-child {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100vh;
+  background-color: var(--surface);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: var(--z-mobile-menu);
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-top: 64px;
+}
+
+.mobile-menu.open {
+  right: 0;
+}
+
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.mobile-menu-links a {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s;
+}
+
+.mobile-menu-links a:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.mobile-menu-links a.active {
+  color: var(--primary);
+  font-weight: 600;
+  border-left: 4px solid var(--primary);
+  padding-left: calc(1rem - 4px);
+}
+
+/* Overlay */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.menu-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  .navbar {
+    padding: 0 1rem;
+  }
+  
+  .desktop-menu {
+    display: none;
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .navbar-logo a {
+    font-size: 1.1rem;
+  }
+}
+
+/* Display fixes for very small screens */
+@media screen and (max-width: 360px) {
+  .navbar-logo a {
+    font-size: 1rem;
+  }
+  
+  .mobile-menu {
+    width: 260px;
+  }
+}
+
+/* Accessibility enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .burger-icon,
+  .burger-icon .bar,
+  .mobile-menu,
+  .menu-overlay {
+    transition: none;
+  }
+}

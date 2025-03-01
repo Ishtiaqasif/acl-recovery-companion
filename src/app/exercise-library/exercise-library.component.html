@@ -1,0 +1,59 @@
+<div class="container">
+  <header class="exercise-header">
+    <h1>Exercise Library</h1>
+    <p>Find and learn the right exercises for your ACL recovery phase</p>
+  </header>
+
+  <div class="search-filters">
+    <div class="search-box">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      </svg>
+      <input 
+        type="text" 
+        placeholder="Search exercises, body parts, or keywords..." 
+        [(ngModel)]="searchQuery"
+      >
+    </div>
+    
+    <div class="phase-filter">
+      <label for="phase-select">Recovery Phase:</label>
+      <select id="phase-select" [(ngModel)]="selectedPhase">
+        <option *ngFor="let phase of phases" [value]="phase.id">{{phase.name}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="result-count">
+    <p>Showing {{filteredExercises.length}} exercises</p>
+  </div>
+
+  <div class="exercise-grid">
+    <div *ngFor="let exercise of filteredExercises" class="exercise-card">
+      <div class="exercise-thumbnail">
+        <div class="difficulty-badge" [class]="exercise.difficulty.toLowerCase()">
+          {{exercise.difficulty}}
+        </div>
+        <div class="thumbnail-placeholder">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="exercise-content">
+        <h3>{{exercise.name}}</h3>
+        <div class="phase-tag" [class]="exercise.phase">
+          {{getPhaseName(exercise.phase)}}
+        </div>
+        <p class="exercise-description">{{exercise.description}}</p>
+        <div class="target-areas">
+          <span class="target-area-label">Target Areas:</span>
+          <div class="target-area-tags">
+            <span *ngFor="let area of exercise.targetAreas" class="target-area-tag">{{area}}</span>
+          </div>
+        </div>
+        <button class="view-button">View Details</button>
+      </div>
+    </div>
+  </div>
+</div>

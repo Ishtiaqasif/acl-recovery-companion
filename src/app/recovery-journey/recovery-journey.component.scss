@@ -1,0 +1,320 @@
+:host {
+  --primary: #0277bd;
+  --primary-light: #58a5f0;
+  --primary-dark: #004c8c;
+  --secondary: #26a69a;
+  --secondary-light: #64d8cb;
+  --secondary-dark: #00766c;
+  --text-on-primary: #ffffff;
+  --text-on-secondary: #ffffff;
+  --background: #f5f5f5;
+  --surface: #ffffff;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  
+  display: block;
+  background-color: var(--background);
+  min-height: calc(100vh - 64px);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+  color: var(--primary-dark);
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+h4 {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+section {
+  margin-bottom: 2.5rem;
+}
+
+/* Journey Header */
+.journey-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.journey-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat {
+  background-color: var(--surface);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 140px;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.timeline-phase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.phase-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--surface);
+  border: 2px solid var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.phase-name {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 80px;
+}
+
+.timeline-connector {
+  flex: 1;
+  height: 2px;
+  background-color: var(--text-secondary);
+  margin: 0 5px;
+}
+
+.timeline-phase.active .phase-dot {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.timeline-phase.active .phase-name {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.timeline-connector.active {
+  background-color: var(--secondary);
+}
+
+/* Daily Plan */
+.plan-card {
+  background-color: var(--surface);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.plan-header {
+  background-color: var(--primary);
+  color: var(--text-on-primary);
+  padding: 1.5rem;
+}
+
+.plan-header p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.plan-activities {
+  padding: 1.5rem;
+}
+
+.activity {
+  display: flex;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.activity:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.activity-icon {
+  background-color: rgba(2, 119, 189, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.activity-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: var(--primary);
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-details p {
+  margin: 0.25rem 0 0.5rem 0;
+  color: var(--text-secondary);
+}
+
+.activity-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.activity-link:hover {
+  text-decoration: underline;
+}
+
+.plan-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.plan-button {
+  background-color: var(--secondary);
+  color: var(--text-on-secondary);
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.plan-button:hover {
+  background-color: var(--secondary-dark);
+}
+
+/* Milestones */
+.milestone-list {
+  background-color: var(--surface);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.milestone-item {
+  display: flex;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.milestone-item:last-child {
+  border-bottom: none;
+}
+
+.milestone-item.completed {
+  background-color: rgba(38, 166, 154, 0.05);
+}
+
+.milestone-status {
+  margin-right: 1rem;
+}
+
+.milestone-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 2px solid var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.milestone-checkbox.checked {
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+}
+
+.milestone-checkbox svg {
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+.milestone-details {
+  flex: 1;
+}
+
+.milestone-details h4 {
+  margin: 0 0 0.25rem 0;
+}
+
+.milestone-details p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+@media screen and (max-width: 768px) {
+  .journey-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .journey-stats {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .timeline {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+  
+  .timeline-phase {
+    min-width: 70px;
+  }
+}

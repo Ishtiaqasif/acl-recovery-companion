@@ -1,0 +1,38 @@
+<nav class="navbar">
+  <div class="navbar-logo">
+    <a routerLink="/">ACL Recovery Companion</a>
+  </div>
+  
+  <!-- Desktop Navigation -->
+  <div class="navbar-links desktop-menu">
+    <a routerLink="/recovery-journey" routerLinkActive="active">My Journey</a>
+    <a routerLink="/exercises" routerLinkActive="active">Exercises</a>
+    <a routerLink="/progress" routerLinkActive="active">Progress</a>
+    <a routerLink="/community" routerLinkActive="active">Community</a>
+    <a routerLink="/resources" routerLinkActive="active">Resources</a>
+  </div>
+  
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" aria-label="Toggle navigation menu">
+    <span class="burger-icon" [class.open]="isMobileMenuOpen">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </span>
+  </button>
+</nav>
+
+<!-- Mobile Navigation Menu -->
+<div class="mobile-menu" [class.open]="isMobileMenuOpen">
+  <div class="mobile-menu-links">
+    <a routerLink="/" (click)="closeMobileMenu()">Home</a>
+    <a routerLink="/recovery-journey" routerLinkActive="active" (click)="closeMobileMenu()">My Journey</a>
+    <a routerLink="/exercises" routerLinkActive="active" (click)="closeMobileMenu()">Exercises</a>
+    <a routerLink="/progress" routerLinkActive="active" (click)="closeMobileMenu()">Progress</a>
+    <a routerLink="/community" routerLinkActive="active" (click)="closeMobileMenu()">Community</a>
+    <a routerLink="/resources" routerLinkActive="active" (click)="closeMobileMenu()">Resources</a>
+  </div>
+</div>
+
+<!-- Overlay for mobile menu -->
+<div class="menu-overlay" [class.open]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
