@@ -1,1 +1,519 @@
-<p>progress-tracker works!</p>
+<div class="container">
+  <header class="progress-header">
+    <h1>My Recovery Progress</h1>
+    <div class="surgery-info">
+      <div class="days-counter">
+        <span class="day-count">{{daysSinceSurgery}}</span>
+        <span class="day-label">Days Post-Surgery</span>
+      </div>
+      <div class="surgery-date">
+        <span class="date-label">Surgery Date:</span>
+        <span class="date-value">{{surgeryDate | date:'MMM d, yyyy'}}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'summary'"
+      (click)="setActiveTab('summary')">
+      Summary
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'log'"
+      (click)="setActiveTab('log')">
+      Progress Log
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'goals'"
+      (click)="setActiveTab('goals')">
+      Recovery Goals
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'charts'"
+      (click)="setActiveTab('charts')">
+      Progress Charts
+    </button>
+  </div>
+
+  <!-- Summary Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'summary'">
+    <section class="progress-overview">
+      <h2>Progress Overview</h2>
+
+      <div class="progress-stats">
+        <div class="stat-card">
+          <div class="stat-header">
+            <h3>Overall Progress</h3>
+            <div class="progress-circle">
+              <div class="progress-number">{{progressPercentage}}%</div>
+            </div>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" [style.width.%]="progressPercentage"></div>
+          </div>
+          <p class="stat-description">{{goals.filter(g => g.achieved).length}} of {{goals.length}} goals achieved</p>
+        </div>
+
+        <div class="stat-card" *ngIf="latestProgress">
+          <div class="stat-header">
+            <h3>Latest Measurements</h3>
+            <span class="last-update">{{latestProgress.date | date:'MMM d'}}</span>
+          </div>
+          <div class="measurements">
+            <div class="measurement">
+              <span class="measurement-label">Flexion:</span>
+              <span class="measurement-value">{{latestProgress.flexion}}°</span>
+            </div>
+            <div class="measurement">
+              <span class="measurement-label">Extension:</span>
+              <span class="measurement-value">{{latestProgress.extension}}°</span>
+            </div>
+            <div class="measurement">
+              <span class="measurement-label">Pain Level:</span>
+              <span class="measurement-value">{{latestProgress.painLevel}}/10</span>
+            </div>
+            <div class="measurement">
+              <span class="measurement-label">Swelling:</span>
+              <span class="measurement-value measurement-tag" [class]="latestProgress.swelling">
+                {{latestProgress.swelling | titlecase}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="actions-grid">
+        <button class="action-button" (click)="setActiveTab('log')">
+          <div class="action-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            </svg>
+          </div>
+          <span>Log Today's Progress</span>
+        </button>
+
+        <button class="action-button" (click)="setActiveTab('goals')">
+          <div class="action-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+            </svg>
+          </div>
+          <span>Update Goals</span>
+        </button>
+
+        <button class="action-button" (click)="setActiveTab('charts')">
+          <div class="action-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2.5 2.1h-15V5h15v14.1zm0-16.1h-15c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+            </svg>
+          </div>
+          <span>View Progress Charts</span>
+        </button>
+
+        <a routerLink="/exercises" class="action-button">
+          <div class="action-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
+            </svg>
+          </div>
+          <span>Exercise Library</span>
+        </a>
+      </div>
+    </section>
+    
+    <section class="recent-progress">
+      <div class="section-header">
+        <h2>Upcoming Goals</h2>
+        <a (click)="setActiveTab('goals')" class="section-link">View All</a>
+      </div>
+      
+      <div class="goals-list">
+        <div class="goal-card" *ngFor="let goal of upcomingGoals">
+          <div class="goal-icon" [class]="goal.category">
+            <svg *ngIf="goal.category === 'mobility'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/>
+            </svg>
+            <svg *ngIf="goal.category === 'strength'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
+            </svg>
+            <svg *ngIf="goal.category === 'activity'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/>
+            </svg>
+            <svg *ngIf="goal.category === 'pain'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34a.9959.9959 0 0 0-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/>
+            </svg>
+          </div>
+          <div class="goal-info">
+            <h3 class="goal-name">{{goal.name}}</h3>
+            <p class="goal-description">{{goal.description}}</p>
+            <p class="goal-target">Target: {{goal.target | date:'MMM d, yyyy'}}</p>
+          </div>
+          <div class="goal-status">
+            <button class="achieve-button" (click)="markGoalAchieved(goal.id)">Mark Achieved</button>
+          </div>
+        </div>
+        
+        <div class="no-goals" *ngIf="upcomingGoals.length === 0">
+          <p>All goals achieved! Great work!</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Progress Log Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'log'">
+    <section class="log-entry-form">
+      <h2>Log Today's Progress</h2>
+      <div class="form-card">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="entry-date">Date</label>
+            <input type="date" id="entry-date" [value]="newEntry.date.toISOString().substr(0, 10)" (change)="newEntry.date = new Date($event.target.value)">
+          </div>
+          
+          <div class="form-group">
+            <label for="pain-level">Pain Level (0-10)</label>
+            <select id="pain-level" [(ngModel)]="newEntry.painLevel">
+              <option *ngFor="let level of painLevelOptions" [value]="level">{{level}}</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="swelling">Swelling</label>
+            <select id="swelling" [(ngModel)]="newEntry.swelling">
+              <option *ngFor="let swelling of swellingOptions" [value]="swelling">{{swelling | titlecase}}</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="flexion">Knee Flexion (degrees)</label>
+            <input type="number" id="flexion" [(ngModel)]="newEntry.flexion" min="0" max="140">
+          </div>
+          
+          <div class="form-group">
+            <label for="extension">Knee Extension (degrees)</label>
+            <input type="number" id="extension" [(ngModel)]="newEntry.extension" min="-30" max="10">
+            <small>Use negative values for incomplete extension</small>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label for="notes">Notes</label>
+            <textarea id="notes" [(ngModel)]="newEntry.notes" rows="3" placeholder="Add any notes about your progress, challenges, or observations"></textarea>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button class="submit-button" (click)="addProgressEntry()">Save Progress</button>
+        </div>
+      </div>
+    </section>
+    
+    <section class="progress-history">
+      <h2>Progress History</h2>
+      
+      <div class="history-list">
+        <div class="history-card" *ngFor="let entry of progressHistory">
+          <div class="history-date">
+            <span class="date">{{entry.date | date:'MMM d, yyyy'}}</span>
+            <span class="days">Day {{(entry.date.getTime() - surgeryDate.getTime()) / (1000 * 60 * 60 * 24) | number:'1.0-0'}}</span>
+          </div>
+          
+          <div class="history-details">
+            <div class="measurement-grid">
+              <div class="measurement">
+                <span class="measurement-label">Pain:</span>
+                <span class="measurement-value" [class.high]="entry.painLevel > 6" [class.medium]="entry.painLevel > 3 && entry.painLevel <= 6" [class.low]="entry.painLevel <= 3">
+                  {{entry.painLevel}}/10
+                </span>
+              </div>
+              
+              <div class="measurement">
+                <span class="measurement-label">Swelling:</span>
+                <span class="measurement-tag" [class]="entry.swelling">
+                  {{entry.swelling | titlecase}}
+                </span>
+              </div>
+              
+              <div class="measurement">
+                <span class="measurement-label">Flexion:</span>
+                <span class="measurement-value">{{entry.flexion}}°</span>
+              </div>
+              
+              <div class="measurement">
+                <span class="measurement-label">Extension:</span>
+                <span class="measurement-value">{{entry.extension}}°</span>
+              </div>
+            </div>
+            
+            <div class="entry-notes" *ngIf="entry.notes">
+              <p>{{entry.notes}}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="no-history" *ngIf="progressHistory.length === 0">
+          <p>No progress entries yet. Start logging your progress!</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <!-- Recovery Goals Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'goals'">
+    <section class="goals-section">
+      <h2>Recovery Goals</h2>
+      
+      <div class="goals-categories">
+        <div class="category-header mobility">
+          <div class="category-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/>
+            </svg>
+          </div>
+          <span>Mobility</span>
+        </div>
+        
+        <div class="goals-list">
+          <div class="goal-card" *ngFor="let goal of goals.filter(g => g.category === 'mobility')" [class.achieved]="goal.achieved">
+            <div class="goal-status-icon">
+              <svg *ngIf="goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <svg *ngIf="!goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+              </svg>
+            </div>
+            <div class="goal-info">
+              <h3 class="goal-name">{{goal.name}}</h3>
+              <p class="goal-description">{{goal.description}}</p>
+              <p *ngIf="!goal.achieved" class="goal-target">Target: {{goal.target | date:'MMM d, yyyy'}}</p>
+              <p *ngIf="goal.achieved" class="goal-achieved">Achieved: {{goal.achievedDate | date:'MMM d, yyyy'}}</p>
+            </div>
+            <div class="goal-actions" *ngIf="!goal.achieved">
+              <button class="achieve-button" (click)="markGoalAchieved(goal.id)">Mark as Achieved</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="category-header strength">
+          <div class="category-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
+            </svg>
+          </div>
+          <span>Strength</span>
+        </div>
+        
+        <div class="goals-list">
+          <div class="goal-card" *ngFor="let goal of goals.filter(g => g.category === 'strength')" [class.achieved]="goal.achieved">
+            <div class="goal-status-icon">
+              <svg *ngIf="goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <svg *ngIf="!goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+              </svg>
+            </div>
+            <div class="goal-info">
+              <h3 class="goal-name">{{goal.name}}</h3>
+              <p class="goal-description">{{goal.description}}</p>
+              <p *ngIf="!goal.achieved" class="goal-target">Target: {{goal.target | date:'MMM d, yyyy'}}</p>
+              <p *ngIf="goal.achieved" class="goal-achieved">Achieved: {{goal.achievedDate | date:'MMM d, yyyy'}}</p>
+            </div>
+            <div class="goal-actions" *ngIf="!goal.achieved">
+              <button class="achieve-button" (click)="markGoalAchieved(goal.id)">Mark as Achieved</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="category-header activity">
+          <div class="category-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/>
+            </svg>
+          </div>
+          <span>Activity</span>
+        </div>
+        
+        <div class="goals-list">
+          <div class="goal-card" *ngFor="let goal of goals.filter(g => g.category === 'activity')" [class.achieved]="goal.achieved">
+            <div class="goal-status-icon">
+              <svg *ngIf="goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <svg *ngIf="!goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+              </svg>
+            </div>
+            <div class="goal-info">
+              <h3 class="goal-name">{{goal.name}}</h3>
+              <p class="goal-description">{{goal.description}}</p>
+              <p *ngIf="!goal.achieved" class="goal-target">Target: {{goal.target | date:'MMM d, yyyy'}}</p>
+              <p *ngIf="goal.achieved" class="goal-achieved">Achieved: {{goal.achievedDate | date:'MMM d, yyyy'}}</p>
+            </div>
+            <div class="goal-actions" *ngIf="!goal.achieved">
+              <button class="achieve-button" (click)="markGoalAchieved(goal.id)">Mark as Achieved</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="category-header pain">
+          <div class="category-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34a.9959.9959 0 0 0-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/>
+            </svg>
+          </div>
+          <span>Pain Management</span>
+        </div>
+        
+        <div class="goals-list">
+          <div class="goal-card" *ngFor="let goal of goals.filter(g => g.category === 'pain')" [class.achieved]="goal.achieved">
+            <div class="goal-status-icon">
+              <svg *ngIf="goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <svg *ngIf="!goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+              </svg>
+            </div>
+            <div class="goal-info">
+              <h3 class="goal-name">{{goal.name}}</h3>
+              <p class="goal-description">{{goal.description}}</p>
+              <p *ngIf="!goal.achieved" class="goal-target">Target: {{goal.target | date:'MMM d, yyyy'}}</p>
+              <p *ngIf="goal.achieved" class="goal-achieved">Achieved: {{goal.achievedDate | date:'MMM d, yyyy'}}</p>
+            </div>
+            <div class="goal-actions" *ngIf="!goal.achieved">
+              <button class="achieve-button" (click)="markGoalAchieved(goal.id)">Mark as Achieved</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <!-- Progress Charts Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'charts'">
+    <section class="charts-section">
+      <h2>Progress Charts</h2>
+      
+      <div class="chart-container">
+        <div class="chart-header">
+          <h3>Knee Flexion Progress</h3>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-color flexion"></div>
+              <span>Flexion (degrees)</span>
+            </div>
+            <div class="legend-target">
+              <span>Target: 120°</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chart-visualization">
+          <div class="chart-placeholder flexion">
+            <!-- In a real app, we would use a proper charting library here -->
+            <div class="placeholder-message">
+              <p>Range of Motion Chart</p>
+              <p>({{flexionData.length}} data points available)</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="data-table">
+          <div class="table-header">
+            <div class="header-cell">Date</div>
+            <div class="header-cell">Value</div>
+          </div>
+          <div class="table-row" *ngFor="let data of flexionData">
+            <div class="table-cell">{{data.date}}</div>
+            <div class="table-cell">{{data.value}}°</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <div class="chart-header">
+          <h3>Knee Extension Progress</h3>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-color extension"></div>
+              <span>Extension (degrees)</span>
+            </div>
+            <div class="legend-target">
+              <span>Target: 0°</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chart-visualization">
+          <div class="chart-placeholder extension">
+            <div class="placeholder-message">
+              <p>Range of Motion Chart</p>
+              <p>({{extensionData.length}} data points available)</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="data-table">
+          <div class="table-header">
+            <div class="header-cell">Date</div>
+            <div class="header-cell">Value</div>
+          </div>
+          <div class="table-row" *ngFor="let data of extensionData">
+            <div class="table-cell">{{data.date}}</div>
+            <div class="table-cell">{{data.value}}°</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <div class="chart-header">
+          <h3>Pain Level Progress</h3>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-color pain"></div>
+              <span>Pain Level (0-10)</span>
+            </div>
+            <div class="legend-target">
+              <span>Target: <3</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chart-visualization">
+          <div class="chart-placeholder pain">
+            <div class="placeholder-message">
+              <p>Pain Level Chart</p>
+              <p>({{painData.length}} data points available)</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="data-table">
+          <div class="table-header">
+            <div class="header-cell">Date</div>
+            <div class="header-cell">Value</div>
+          </div>
+          <div class="table-row" *ngFor="let data of painData">
+            <div class="table-cell">{{data.date}}</div>
+            <div class="table-cell">{{data.value}}/10</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
