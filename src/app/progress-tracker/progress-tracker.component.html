@@ -57,7 +57,7 @@
           <div class="progress-bar-container">
             <div class="progress-bar" [style.width.%]="progressPercentage"></div>
           </div>
-          <p class="stat-description">{{goals.filter(g => g.achieved).length}} of {{goals.length}} goals achieved</p>
+          <p class="stat-description">{{getAchievedGoalsCount()}} of {{goals.length}} goals achieved</p>
         </div>
 
         <div class="stat-card" *ngIf="latestProgress">
@@ -137,7 +137,7 @@
       </div>
       
       <div class="goals-list">
-        <div class="goal-card" *ngFor="let goal of upcomingGoals">
+        <div class="goal-card" *ngFor="let goal of getUpcomingGoals()">
           <div class="goal-icon" [class]="goal.category">
             <svg *ngIf="goal.category === 'mobility'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7"/>
@@ -177,7 +177,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="entry-date">Date</label>
-            <input type="date" id="entry-date" [value]="newEntry.date.toISOString().substr(0, 10)" (change)="newEntry.date = new Date($event.target.value)">
+            <input type="date" id="entry-date" [value]="newEntry.date.toISOString().substring(0, 10)" (change)="updateEntryDate($event)">
           </div>
           
           <div class="form-group">
@@ -287,7 +287,7 @@
         </div>
         
         <div class="goals-list">
-          <div class="goal-card" *ngFor="let goal of goals.filter(g => g.category === 'mobility')" [class.achieved]="goal.achieved">
+          <div class="goal-card" *ngFor="let goal of getGoalsByCategory('mobility')" [class.achieved]="goal.achieved">
             <div class="goal-status-icon">
               <svg *ngIf="goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
@@ -318,7 +318,7 @@
         </div>
         
         <div class="goals-list">
-          <div class="goal-card" *ngFor="let goal of goals.filter(g => g.category === 'strength')" [class.achieved]="goal.achieved">
+          <div class="goal-card" *ngFor="let goal of getGoalsByCategory('strength')" [class.achieved]="goal.achieved">
             <div class="goal-status-icon">
               <svg *ngIf="goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
@@ -349,7 +349,7 @@
         </div>
         
         <div class="goals-list">
-          <div class="goal-card" *ngFor="let goal of goals.filter(g => g.category === 'activity')" [class.achieved]="goal.achieved">
+          <div class="goal-card" *ngFor="let goal of getGoalsByCategory('activity')" [class.achieved]="goal.achieved">
             <div class="goal-status-icon">
               <svg *ngIf="goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
@@ -380,7 +380,7 @@
         </div>
         
         <div class="goals-list">
-          <div class="goal-card" *ngFor="let goal of goals.filter(g => g.category === 'pain')" [class.achieved]="goal.achieved">
+          <div class="goal-card" *ngFor="let goal of getGoalsByCategory('pain')" [class.achieved]="goal.achieved">
             <div class="goal-status-icon">
               <svg *ngIf="goal.achieved" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>

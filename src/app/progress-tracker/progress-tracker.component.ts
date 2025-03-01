@@ -36,6 +36,9 @@ export class ProgressTrackerComponent implements OnInit {
   // Calculate days since surgery
   daysSinceSurgery = Math.floor((this.today.getTime() - this.surgeryDate.getTime()) / (1000 * 60 * 60 * 24));
   
+  // For math operations in template
+  Math = Math;
+  
   painLevelOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   swellingOptions = ['none', 'mild', 'moderate', 'severe'];
   
@@ -165,6 +168,12 @@ export class ProgressTrackerComponent implements OnInit {
   }
   
   // Add new progress entry
+  updateEntryDate(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const dateValue = inputElement.value;
+    this.newEntry.date = new Date(dateValue);
+  }
+  
   addProgressEntry(): void {
     // Create a deep copy to avoid reference issues
     const entry: ProgressEntry = {
@@ -258,12 +267,22 @@ export class ProgressTrackerComponent implements OnInit {
   
   // Calculate progress percentage based on goals achieved
   get progressPercentage(): number {
-    const achievedGoals = this.goals.filter(g => g.achieved).length;
+    const achievedGoals = this.getAchievedGoalsCount();
     return Math.round((achievedGoals / this.goals.length) * 100);
+  }
+  
+  // Get count of achieved goals for template use without arrow functions
+  getAchievedGoalsCount(): number {
+    return this.goals.filter(g => g.achieved).length;
   }
   
   // Get upcoming goals
   get upcomingGoals(): Goal[] {
+    return this.getUpcomingGoals();
+  }
+  
+  // Method to get upcoming goals without arrow functions in template
+  getUpcomingGoals(): Goal[] {
     return this.goals
       .filter(g => !g.achieved)
       .sort((a, b) => a.target.getTime() - b.target.getTime())
@@ -276,5 +295,10 @@ export class ProgressTrackerComponent implements OnInit {
       .filter(g => g.achieved && g.achievedDate)
       .sort((a, b) => (b.achievedDate as Date).getTime() - (a.achievedDate as Date).getTime())
       .slice(0, 3); // Get the 3 most recently achieved goals
+  }
+  
+  // Methods to filter goals by category for template use
+  getGoalsByCategory(category: 'mobility' | 'strength' | 'activity' | 'pain'): Goal[] {
+    return this.goals.filter(g => g.category === category);
   }
 }
