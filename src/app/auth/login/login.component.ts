@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+//import { AuthService } from '../../services/auth.service';
 import { LoginData } from '../../models/user.model';
 
 @Component({
@@ -23,7 +23,7 @@ export class LoginComponent {
   returnUrl = '/';
 
   constructor(
-    private authService: AuthService,
+    //private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
   ) { }
@@ -33,7 +33,7 @@ export class LoginComponent {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     
     // Redirect to home if already logged in
-    if (this.authService.isLoggedIn()) {
+    if (true/*this.authService.isLoggedIn()*/) {
       this.router.navigate(['/']);
     }
   }
@@ -42,17 +42,17 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.authService.login(this.loginData).subscribe({
-      next: (response) => {
-        // Login successful
-        this.isLoading = false;
-        // Navigate to return URL
-        this.router.navigateByUrl(this.returnUrl);
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.errorMessage = error.error?.message || 'An error occurred during login. Please try again.';
-      }
-    });
+    // this.authService.login(this.loginData).subscribe({
+    //   next: (response) => {
+    //     // Login successful
+    //     this.isLoading = false;
+    //     // Navigate to return URL
+    //     this.router.navigateByUrl(this.returnUrl);
+    //   },
+    //   error: (error) => {
+    //     this.isLoading = false;
+    //     this.errorMessage = error.error?.message || 'An error occurred during login. Please try again.';
+    //   }
+    // });
   }
 }

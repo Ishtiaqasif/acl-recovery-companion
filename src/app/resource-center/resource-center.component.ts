@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ResourceService } from '../services/resource.service';
 import { Resource, ResourceFilters, ResourceListResponse } from '../models/resource.model';
-import { AuthService } from '../services/auth.service';
+//import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-resource-center',
@@ -53,13 +53,13 @@ export class ResourceCenterComponent implements OnInit {
 
   constructor(
     private resourceService: ResourceService,
-    private authService: AuthService
+    //private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser.subscribe(user => {
-      this.isAdmin = user?.role === 'admin';
-    });
+    // this.authService.currentUser.subscribe(user => {
+    //   this.isAdmin = user?.role === 'admin';
+    // });
     
     this.loadFeaturedResources();
     this.loadPhaseResources();
@@ -67,45 +67,45 @@ export class ResourceCenterComponent implements OnInit {
   }
 
   loadFeaturedResources(): void {
-    this.resourceService.getFeaturedResources().subscribe({
-      next: (response: ResourceListResponse) => {
-        this.featuredResources = response.data;
-      },
-      error: (error: Error) => {
-        console.error('Error loading featured resources', error);
-      }
-    });
+    // this.resourceService.getFeaturedResources().subscribe({
+    //   next: (response: ResourceListResponse) => {
+    //     this.featuredResources = response.data;
+    //   },
+    //   error: (error: Error) => {
+    //     console.error('Error loading featured resources', error);
+    //   }
+    // });
   }
 
   loadPhaseResources(): void {
     // Get resources for each recovery phase except 'all'
     this.recoveryPhases.filter(phase => phase.value !== 'all').forEach(phase => {
-      this.resourceService.getResourcesByPhase(phase.value, 3).subscribe({
-        next: (response: ResourceListResponse) => {
-          this.phaseResources[phase.value] = response.data;
-        },
-        error: (error: Error) => {
-          console.error(`Error loading ${phase.label} resources`, error);
-        }
-      });
+      // this.resourceService.getResourcesByPhase(phase.value, 3).subscribe({
+      //   next: (response: ResourceListResponse) => {
+      //     this.phaseResources[phase.value] = response.data;
+      //   },
+      //   error: (error: Error) => {
+      //     console.error(`Error loading ${phase.label} resources`, error);
+      //   }
+      // });
     });
   }
 
   loadResources(): void {
     this.isLoading = true;
-    this.resourceService.getResources(this.filters).subscribe({
-      next: (response: ResourceListResponse) => {
-        this.resources = response.data;
-        this.totalResources = response.total;
-        this.totalPages = response.pagination.totalPages;
-        this.isLoading = false;
-      },
-      error: (error: Error) => {
-        this.error = error.message || 'Failed to load resources';
-        this.isLoading = false;
-        console.error('Error loading resources', error);
-      }
-    });
+    // this.resourceService.getResources(this.filters).subscribe({
+    //   next: (response: ResourceListResponse) => {
+    //     this.resources = response.data;
+    //     this.totalResources = response.total;
+    //     this.totalPages = response.pagination.totalPages;
+    //     this.isLoading = false;
+    //   },
+    //   error: (error: Error) => {
+    //     this.error = error.message || 'Failed to load resources';
+    //     this.isLoading = false;
+    //     console.error('Error loading resources', error);
+    //   }
+    // });
   }
 
   applyFilters(): void {

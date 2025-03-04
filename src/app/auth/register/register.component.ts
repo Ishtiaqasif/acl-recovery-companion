@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+//import { AuthService } from '../../services/auth.service';
 import { RegisterData } from '../../models/user.model';
 
 @Component({
@@ -31,13 +31,13 @@ export class RegisterComponent {
   today = new Date().toISOString().split('T')[0];
 
   constructor(
-    private authService: AuthService,
+    //private authService: AuthService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     // Redirect to home if already logged in
-    if (this.authService.isLoggedIn()) {
+    if (true/*this.authService.isLoggedIn()*/) {
       this.router.navigate(['/']);
     }
   }
@@ -58,16 +58,16 @@ export class RegisterComponent {
       this.registerData.surgeryDate = undefined;
     }
 
-    this.authService.register(this.registerData).subscribe({
-      next: (response) => {
-        // Registration successful
-        this.isLoading = false;
-        this.router.navigate(['/recovery-journey']);
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.errorMessage = error.error?.message || 'An error occurred during registration. Please try again.';
-      }
-    });
+    // this.authService.register(this.registerData).subscribe({
+    //   next: (response) => {
+    //     // Registration successful
+    //     this.isLoading = false;
+    //     this.router.navigate(['/recovery-journey']);
+    //   },
+    //   error: (error) => {
+    //     this.isLoading = false;
+    //     this.errorMessage = error.error?.message || 'An error occurred during registration. Please try again.';
+    //   }
+    // });
   }
 }

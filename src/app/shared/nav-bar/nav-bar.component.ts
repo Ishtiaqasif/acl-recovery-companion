@@ -1,7 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common'//;
+//import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +16,7 @@ export class NavBarComponent {
   isUserMenuOpen = false;
   
   constructor(
-    public authService: AuthService,
+    //public authService: AuthService,
     private router: Router
   ) {}
   
@@ -47,7 +47,7 @@ export class NavBarComponent {
   }
   
   logout() {
-    this.authService.logout();
+    //this.authService.logout();
     this.closeUserMenu();
     this.closeMobileMenu();
     this.router.navigate(['/']);

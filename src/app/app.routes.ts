@@ -6,7 +6,7 @@ import { ProgressTrackerComponent } from './progress-tracker/progress-tracker.co
 import { CommunityComponent } from './community/community.component';
 import { ResourceCenterComponent } from './resource-center/resource-center.component';
 import { AUTH_ROUTES } from './auth/auth.routes';
-import { authGuard } from './guards/auth.guard';
+//import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   // Public routes
@@ -31,25 +31,25 @@ export const routes: Routes = [
   { 
     path: 'recovery-journey', 
     component: RecoveryJourneyComponent,
-    canActivate: [authGuard],
+    //canActivate: [authGuard],
     title: 'My Recovery Journey - ACL Recovery Companion'
   },
   { 
     path: 'exercises', 
     component: ExerciseLibraryComponent,
-    canActivate: [authGuard],
+    //canActivate: [authGuard],
     title: 'Exercise Library - ACL Recovery Companion'
   },
   { 
     path: 'progress', 
     component: ProgressTrackerComponent,
-    canActivate: [authGuard],
+    //canActivate: [authGuard],
     title: 'Progress Tracker - ACL Recovery Companion'
   },
   { 
     path: 'community', 
     component: CommunityComponent,
-    canActivate: [authGuard],
+    //canActivate: [authGuard],
     title: 'Community - ACL Recovery Companion'
   },
   
